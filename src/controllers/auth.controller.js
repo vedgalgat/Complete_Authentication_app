@@ -1,51 +1,54 @@
-const UserModel = require("../models/user.model")
-const jwt = require("jsonwebtoken")
-const bcrypt = require("bcryptjs")
+    const UserModel = require("../models/user.model")
+    const jwt = require("jsonwebtoken")
+    const bcrypt = require("bcryptjs")
+    const sendMail=require("../controllers/mail.controller")
 
 
-async function registerUser(req, res) {
-    const { name, password, email } = req.body
+    async function registerUser(req, res) {
+        const { name, password, email } = req.body
 
-     const userExists = await UserModel.findOne({
-        $or:[{name},{email}]
-     })
+        const userExists = await UserModel.findOne({
+            $or:[{name},{email}]
+        })
 
-    if (userExists) {
-        return res.status(400).json({ message: "User already exists" })
+        if (userExists) {
+            return res.status(400).json({ message: "User already exists" })
+        }
+
+        const newUser = await UserModel.create({
+            name,
+            password: await bcrypt.hash(password, 10),
+            email
+        })
+
+        await sendMail(email,name)
+
+        const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET)
+
+        res.cookie("token", token)
+
+        return res.status(201).json({ message: "User registered successfully", user: newUser, })
     }
 
-    const newUser = await UserModel.create({
-        name,
-        password: await bcrypt.hash(password, 10),
-        email
-    })
+    async function loginUser(req, res) {
+        const { password, email,  } = req.body
 
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET)
+        const user = await UserModel.findOne({ email })
 
-    res.cookie("token", token)
+        if (!user) {
+            return res.status(400).json({ message: "Invalid credentials" })
+        }
+        const isPasswordValid = await bcrypt.compare(password, user.password)
 
-    return res.status(201).json({ message: "User registered successfully", user: newUser, })
-}
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: "Invalid credentials" })
+        }
+    
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
 
-async function loginUser(req, res) {
-    const { password, email,  } = req.body
+        res.cookie("token", token)
 
-    const user = await UserModel.findOne({ email })
-
-    if (!user) {
-        return res.status(400).json({ message: "Invalid credentials" })
+        return res.status(200).json({ message: "User logged in successfully", user })
     }
-    const isPasswordValid = await bcrypt.compare(password, user.password)
 
-    if (!isPasswordValid) {
-        return res.status(400).json({ message: "Invalid credentials" })
-    }
- 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET)
-
-    res.cookie("token", token)
-
-    return res.status(200).json({ message: "User logged in successfully", user })
-}
-
-module.exports = { registerUser, loginUser }
+    module.exports = { registerUser, loginUser }
