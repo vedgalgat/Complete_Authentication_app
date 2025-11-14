@@ -32,9 +32,10 @@ function Signup() {
             const data = await response.json();
             if (response.ok) {
                 toast.success("Signup Successful $ Sent Mail On Register Email",{
-                    position: "top-left",
-                    color:"white",
-                    backgroundColor:"green"
+                    style:{
+                    color:"red",
+                    backgroundColor:"black"
+                    }
                 });
                 console.log("Signup Response:", data);
 
