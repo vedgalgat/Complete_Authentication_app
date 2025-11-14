@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import {toast} from "react-toastify"
 
 function Login() {
   const [formdata, setformdata] = useState({
@@ -28,7 +29,12 @@ function Login() {
       const data = await response.json();
 
       if (response.ok) {
-        alert("Login Successful 🎉");
+        toast.success("Login Successful 🎉",{
+          style:{
+          background:"black",
+          color:"red "
+          }
+        });
         console.log("Login Response:", data);
 
 
