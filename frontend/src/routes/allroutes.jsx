@@ -1,6 +1,6 @@
-import React from "react" ;
-import Signup from "../pages/signup";
-import Login from "../pages/login";
+import Signup from "../pages/Signup.jsx";
+import Login from "../pages/Login.jsx";
+
 
 import { Routes, Route } from "react-router-dom"
 
@@ -10,8 +10,8 @@ const Allroutes = () => {
         <>
             <Routes>
                 <Route path="/" element={<Signup />} />
-                <Route path="/signup" element={<Signup />} />
-                <Route path="/login" element={<Login />} />
+                <Route path="/Signup" element={<Signup />} />
+                <Route path="/Login" element={<Login />} />
             </Routes>
 
         </>

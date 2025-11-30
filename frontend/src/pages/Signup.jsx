@@ -21,12 +21,13 @@ function Signup() {
         e.preventDefault();
 
         try {
-            const response = await fetch("http://localhost:3000/api/users/register", {
+            const response = await fetch("https://authentication-app-bt8a.onrender.com/api/users/register", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify(formdata),
+                 credentials: "include"
             });
 
             const data = await response.json();
@@ -48,7 +49,7 @@ function Signup() {
                 alert("Signup Failed: " + data.message);
             }
         } catch (error) {
-            console.log("Error during signup:", error);
+            console.log("Error during signup:", error.message);
         }
 
         setformdata({

@@ -18,7 +18,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch("http://localhost:3000/api/users/login", {
+      const response = await fetch("https://authentication-app-bt8a.onrender.com/api/users/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,7 +56,7 @@ function Login() {
     }
   };
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden">
+    <div className="flex justify-center items-center min-h-screen bg-linear-to-br from-gray-900 via-black to-gray-800 relative overflow-hidden">
       {/* Background glowing circles */}
       <div className="absolute top-20 left-32 w-22 h-22 bg-pink-600/20 rounded-full blur-3xl animate-pulse"></div>
       <div className="absolute bottom-20 right-32 w-22 h-22 bg-purple-500/20 rounded-full blur-3xl animate-pulse"></div>
